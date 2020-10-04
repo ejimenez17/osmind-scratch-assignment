@@ -3,5 +3,21 @@
 }
 
 .App .navbar-brand {
+  color: #3e3d3d;
   font-weight: bold;
+}
+
+.App .container-fluid,
+.App .navbar-header,
+.App .navbar-collapse {
+  background-color: #73a1ea;
+}
+
+.App .navbar-default .navbar-nav>li>a {
+  color: #3e3d3d;
+}
+
+.App .navbar-brand:hover,
+.App .navbar-default .navbar-nav>li>a:hover {
+  color: #777;
 }

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { API } from "aws-amplify";
+import { PageHeader, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
-import { PageHeader, ListGroup, ListGroupItem } from "react-bootstrap";
 import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
 import "./Home.css";
@@ -10,8 +10,11 @@ import "./Home.css";
 
 export default function Home() {
   const [notes, setNotes] = useState([]);
+  const [originalNotes, setOriginalNotes] = useState([]);
   const { isAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(true);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [searchContent, setSearchContent] = useState("");
 
   useEffect(() => {
     async function onLoad() {
@@ -22,6 +25,7 @@ export default function Home() {
       try {
         const notes = await loadNotes();
         setNotes(notes);
+        setOriginalNotes(notes);
       } catch (e) {
         onError(e);
       }
@@ -34,6 +38,25 @@ export default function Home() {
 
   function loadNotes() {
     return API.get("notes", "/notes");
+  }
+
+  function handleSearchChange(e) {
+    setSearchContent(e.target.value);
+  }
+
+  function updateNotes() {
+    if (originalNotes.length == 0) {
+      return;
+    }
+
+    setIsUpdating(true);
+
+    var updatedNotes = originalNotes.filter(
+      (note) => note.content.includes(searchContent)
+    );
+    
+    setNotes(updatedNotes);
+    setIsUpdating(false);
   }
 
   function renderNotesList(notes) {
@@ -73,13 +96,33 @@ export default function Home() {
     );
   }
 
+  function renderLoader() {
+    return (
+      <div className="loader"></div>
+    );
+  }
+
   function renderNotes() {
     return (
       <div className="notes">
         <PageHeader>Your Notes</PageHeader>
-        <ListGroup>
-          {!isLoading && renderNotesList(notes)}
-        </ListGroup>
+        {renderSearchBar()}
+        {(isLoading || isUpdating) ? renderLoader() : (
+          <ListGroup>
+            {!isLoading && renderNotesList(notes)}
+          </ListGroup>
+        )}
+      </div>
+    );
+  }
+
+  function renderSearchBar() {
+    return (
+      <div className="search-bar">
+        <input type="text" className="form-control" id="form-control" onChange={handleSearchChange} placeholder="Search for content" aria-label="Search" aria-describedby="search-btn"></input>
+        <div className="input-group-append">
+          <button className="btn btn-search" type="button" id="search-btn" onClick={updateNotes}>Search</button>
+        </div>
       </div>
     );
   }

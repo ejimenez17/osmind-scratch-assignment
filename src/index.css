@@ -9,10 +9,11 @@ body {
 }
 h1, h2, h3, h4, h5, h6 {
   font-family: "PT Serif", serif;
+  color: #3e3d3d;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: "PT Serif", serif;
+p {
+  color: #3e3d3d;
 }
 
 select.form-control,
@@ -22,4 +23,49 @@ input.form-control {
 }
 input[type=file] {
   width: 100%;
+}
+
+/* button CSS */
+
+.btn-primary[disabled],
+.btn-default[disabled],
+.btn-primary[disabled]:hover,
+.btn-default[disabled]:hover {
+  background-color: #83abeb;
+}
+
+.btn-primary,
+.btn-default {
+  background-color: #73a1ea;
+}
+
+.btn-primary:hover,
+.btn-default:hover {
+  background-color: #2464bc;
+}
+
+/* loader CSS */
+
+.loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  border: 10px solid #d4e3fb;
+  border-radius: 50%;
+  border-top: 10px solid #73a1ea;
+  width: 50px;
+  height: 50px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); border-top: 10px solid #73a1ea; }
+  100% { transform: rotate(360deg); border-top: 10px solid #ef8e78; }
 }

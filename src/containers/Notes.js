@@ -16,6 +16,7 @@ export default function Notes() {
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isRetrieving, setIsRetrieving] = useState(true);
 
   useEffect(() => {
     function loadNote() {
@@ -36,6 +37,8 @@ export default function Notes() {
       } catch (e) {
         onError(e);
       }
+
+      setIsRetrieving(false);
     }
 
     onLoad();
@@ -117,9 +120,15 @@ export default function Notes() {
     }
   }
 
+  function renderLoader() {
+    return (
+      <div className="loader"></div>
+    );
+  }
+
   return (
     <div className="Notes">
-      {note && (
+      {isRetrieving ? renderLoader() : note && (
         <form onSubmit={handleSubmit}>
           <FormGroup controlId="content">
             <FormControl
